@@ -7,6 +7,7 @@ import json
 # from multiprocessing import Pool, current_process
 import os
 sys.path.append("../..")
+'''The following section converts input files into 5year groups'''
 #save as 5-years groups
 # for gridi in range(97):
 #     for gridj in range(36):
@@ -113,7 +114,7 @@ def func(i):
                             for key, value in result.items()}
     with open('SAoutput_CP/SAresult_5yr_%d' %i, "w") as json_file:
         json.dump(results_serializable, json_file, indent=4)
-
+'''These final sensitivity analysis results are presented in the folders'''
 
 # exp_a = range(1825) #list to loop through climate scenarios
 

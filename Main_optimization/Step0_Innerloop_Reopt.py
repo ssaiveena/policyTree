@@ -37,7 +37,7 @@ def training_data(D, splitdata_demand, splitdata, window, years):
 cfs_to_tafd = 2.29568411 * 10 ** -5 * 86400 / 1000
 
 def func(gridi,gridj,w):
-    print('a')
+
     res_all = []
     cmip5_scenarios = pd.read_csv('../Data/cmip5/scenario_names.csv').name.to_list()
     lulc_scenarios = pd.read_csv('../Data/lulc/scenario_names.csv').name.to_list()
@@ -47,7 +47,7 @@ def func(gridi,gridj,w):
     df_Q = pd.read_csv('../Data/cmip5/%s.csv.zip' % sc, index_col=0, parse_dates=True)
     df_demand = pd.read_csv('../Data/lulc/%s.csv.zip' % sl, index_col=0, parse_dates=True)
     df_Q['dowy'] = np.array([water_day_up(d,y) for d,y in zip(df_Q.index.dayofyear,df_Q.index.year)])
-    print('a')
+
     splitdata = np.array_split(df_Q, np.intersect1d(np.where(df_Q.index.day == 1), np.where(df_Q.index.month == 10)))
     splitdata_demand = np.array_split(df_demand, np.intersect1d(np.where(df_demand.index.day == 1), np.where(df_demand.index.month == 10)))
         # defining data for frequency "f"
@@ -59,7 +59,7 @@ def func(gridi,gridj,w):
 
     K = 3524  # capacity, TAF #this is fixed for the future too
     D = np.loadtxt('demand_Oroville.txt')  # target demand, TAF/d #demand is calculated based on median historical release multiplied by demand multiplier
-    print('a')
+
     for years in range(n_y-50):
       year_sim = 2000 + years
       #Code to train policy for reoptimization of given historical window
@@ -70,10 +70,9 @@ def func(gridi,gridj,w):
       res = DE(train, args=(layers, K, demand, Q['ORO_inflow_cfs'].values * cfs_to_tafd, T, dowy), tol= 1, maxiter=10000,bounds=np.tile(weight_bounds, (num_weights,1)))
 
       '''may save the policy if needed'''
-      print('a')
+
       res_all.append(res.x.tolist())
     with open(filedir + 'res_%s_%s.json' %(sc, sl), 'w') as f:
-      print('a')
       json.dump(res_all, f)
 
 
@@ -83,6 +82,7 @@ st = time.time()
 exp_a = range(1)#97
 exp_b = range(1)#36
 
+'''use the following to run on multiprocessing across all scenarios for parallel processing to reduce the runtime'''
 # auxiliary funciton to make it work
 # def product_helper(args):
 #     return func(*args)
@@ -98,8 +98,9 @@ exp_b = range(1)#36
 
 if __name__ == '__main__':
     # for w in w_comb:
-    #     parallel_product(exp_a, exp_b, w)
+    #     parallel_product(exp_a, exp_b, w) #use this for parallel processing
 
     func(0,0,50)
+    #this is an example case to run for one scenario and Reopt_50
     et  = time.time()
     print(et-st)

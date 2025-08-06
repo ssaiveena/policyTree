@@ -28,7 +28,7 @@ if __name__ == '__main__':
     for seed in range(0, 1):
       for i in range(15): #[2,14,6]: #range(15)
         print(i)
-        b = pd.read_csv('b_%d.csv' %(i))
+        b = pd.read_csv('b_%d.csv' %(i)) #These files are generated from Figure3_results code
         c1 = pd.read_csv('c_%d.csv' %(i), index_col=0)
         print(np.shape(c1))
         c = pd.concat([c, c1])
