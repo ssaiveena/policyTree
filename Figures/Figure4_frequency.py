@@ -1,27 +1,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from subprocess import call
-import random
-import json
+import sys
 import os
 from os import listdir
 from os.path import isfile, join
 import seaborn as sns
 import pickle
 from matplotlib import cm
-import ptreeopt
-from ptreeopt.plotting import *
 import matplotlib.patches as mpatches
 import matplotlib
 from matplotlib.colors import Normalize
 from matplotlib.cm import ScalarMappable
+sys.path.append(os.path.abspath("../Main_optimization"))
+import ptreeopt
 
-snapshots = pickle.load(open('snapshots/result.pkl', 'rb'), encoding='latin1')
+
+snapshots = pickle.load(open('../Main_optimization/snapshots/result.pkl', 'rb'), encoding='latin1')
 f = snapshots['best_f'][-1]
 P = snapshots['best_P'][-1]
 #P = snapshots['best_P'][0]
-
 
 ###################################################################################################################
 ################Plot indicators ############################################################

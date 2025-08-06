@@ -9,7 +9,6 @@ def train(weights, layers, K, D, Q, T, dowy, S_0):
     c = short + flood
     return c
 
-
 @njit
 def simulate(weights, layers, K, D, Q, T, dowy, S_0):
     S = np.zeros(T)
@@ -65,4 +64,4 @@ def simulate(weights, layers, K, D, Q, T, dowy, S_0):
         storage_cost[t] = max(D[t] - R[t], 0) ** 2
         flood_cost[t] = 10 ** 2 * max(R[t] - 100, 0)
 
-    return storage_cost.sum(), flood_cost.sum(), S[t] , S, R, inputs_save
+    return storage_cost.sum(), flood_cost.sum(), S[t] #, S, R, inputs_save

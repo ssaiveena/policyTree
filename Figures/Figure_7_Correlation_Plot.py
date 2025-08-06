@@ -1,15 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.optimize import minimize, differential_evolution
-from numba import njit
-from scipy.optimize import differential_evolution as DE
 import pandas as pd
 import json
 import sys
 import seaborn as sns
 from shap import summary_plot
 sys.path.append('..')
-from ptreeopt import PTreeOpt
+import os
+sys.path.append(os.path.abspath("../Main_optimization"))
+import Main_optimization.ptreeopt
+from Main_optimization.ptreeopt import PTreeOpt
 import pickle
 from sklearn.model_selection import train_test_split
 import shap
@@ -25,30 +25,30 @@ if __name__ == '__main__':
     c= pd.DataFrame()
     d_all = []
 
-    # for seed in range(0, 1):
-    #   for i in range(15): #[2,14,6]: #range(15)
-    #     print(i)
-    #     b = pd.read_csv('b_%d.csv' %(i))
-    #     c1 = pd.read_csv('c_%d.csv' %(i), index_col=0)
-    #     print(np.shape(c1))
-    #     c = pd.concat([c, c1])
-    #     d1 = []
-    #
-    #     d = json.load(open('d_%d.json' %(i)))
-    #     for j in range(len(b.values)):
-    #         d1.append(d[str(b.iloc[j, 0])])
-    #
-    #     d_all = d_all + d1
-    # #c.to_csv('c_all.csv')
-    # #np.savetxt('d_all.csv', d_all) # solve the issue of saving this file
-    # act=[]
-    # #map d_all to numbers based on actions
-    # for j in range(len(d_all)):
-    #     act.append(mapping[d_all[j]])
-    # with open('c','wb') as fp:
-    #     pickle.dump(c, fp)
-    # with open('act', 'wb') as fp:
-    #     pickle.dump(act, fp)
+    for seed in range(0, 1):
+      for i in range(15): #[2,14,6]: #range(15)
+        print(i)
+        b = pd.read_csv('b_%d.csv' %(i))
+        c1 = pd.read_csv('c_%d.csv' %(i), index_col=0)
+        print(np.shape(c1))
+        c = pd.concat([c, c1])
+        d1 = []
+
+        d = json.load(open('d_%d.json' %(i)))
+        for j in range(len(b.values)):
+            d1.append(d[str(b.iloc[j, 0])])
+
+        d_all = d_all + d1
+    #c.to_csv('c_all.csv')
+    #np.savetxt('d_all.csv', d_all) # solve the issue of saving this file
+    act=[]
+    #map d_all to numbers based on actions
+    for j in range(len(d_all)):
+        act.append(mapping[d_all[j]])
+    with open('c','wb') as fp:
+        pickle.dump(c, fp)
+    with open('act', 'wb') as fp:
+        pickle.dump(act, fp)
     with open('act', 'rb') as fp:
         act_all = pickle.load(fp)
     with open('c', 'rb') as fp:
@@ -62,9 +62,7 @@ if __name__ == '__main__':
     explainer = shap.TreeExplainer(model)
     shap_values1 = explainer(X_train)
     shap_values = shap.TreeExplainer(model).shap_values(X_train)
-    #shap.summary_plot(shap_values, X_train)
-    # print(np.shape(shap_values)) (2836512, 12, 5)
-    # shap.summary_plot(shap_values[0][:, :], X_train.iloc[:, :], plot_type="violin", color='coolwarm')
+
     fig, ax = plt.subplots(1, 2, figsize=(12, 7))
     ax = ax.ravel()
     data_corr = np.zeros((np.shape(shap_values)[0],np.shape(shap_values)[1]))
